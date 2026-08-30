@@ -15,11 +15,11 @@
 
 There's no level. Only distance.
 
-Each road tile spawns the next one when you cross it, then deletes itself — **constant memory,
+Each road tile spawns the next one when you cross it, then deletes itself. **Constant memory,
 infinite road**. Out there, two things happen:
 
 - **Things on the road.** One to three per section, pulled from a pool. Some are obstacles. Some are just there.
-- **Things in your head.** Certain triggers surface a memory instead of an object — it plays over the drive, then clears.
+- **Things in your head.** Certain triggers surface a memory instead of an object. It plays over the drive, then clears.
 
 And a radio. It starts *silent*. You have to reach over and turn it up.
 
@@ -29,7 +29,7 @@ E / Q  →  track          R / T  →  volume
 
 ## Adding an event is three steps
 
-Make the prefab, implement one interface, drop it in the pool. There's no dispatch code to edit —
+Make the prefab, implement one interface, drop it in the pool. There's no dispatch code to edit, because
 the prefab declares where it belongs:
 
 ```csharp
