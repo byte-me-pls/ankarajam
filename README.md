@@ -1,78 +1,47 @@
-# Ankara Jam — Road Trip
+<h1 align="center">🛣 Road Trip</h1>
 
-A driving game about **remembering**. You hold a lane down an endless road; the road hands you
-memories back.
+<p align="center">
+  <b>A driving game about remembering.</b><br>
+  <sub>You hold a lane. The road hands you memories back.</sub>
+</p>
 
-Made for Ankara Game Jam in Unity 6.
+<p align="center">
+  <img src="https://img.shields.io/badge/Unity-6000.0.45f1-000000?style=for-the-badge&logo=unity" />
+  <img src="https://img.shields.io/badge/Ankara%20Game%20Jam-e63946?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white" />
+</p>
 
-## The idea
+---
 
-The road generates itself as you drive — each tile spawns the next when you cross it, so there is no
-level, only distance. Two things happen out there:
+There's no level. Only distance.
 
-- **Roadside events.** Objects spawn on the road or on the shoulder ahead of you, one to three per
-  tile section, picked at random from a pool. Some are obstacles. Some are just there.
-- **Memories.** Certain triggers surface a UI fragment instead of a physical object — a clip that
-  plays over the drive and then clears itself. The further you get, the more of them you have seen.
+Each road tile spawns the next one when you cross it, then deletes itself — **constant memory,
+infinite road**. Out there, two things happen:
 
-And a radio, which is the part that makes the drive yours:
+- **Things on the road.** One to three per section, pulled from a pool. Some are obstacles. Some are just there.
+- **Things in your head.** Certain triggers surface a memory instead of an object — it plays over the drive, then clears.
 
-| Key | Action |
-| --- | --- |
-| `E` / `Q` | Next / previous track |
-| `R` / `T` | Volume down / up |
+And a radio. It starts *silent*. You have to reach over and turn it up.
 
-It starts silent and fades in — you have to reach over and turn it up.
+```
+E / Q  →  track          R / T  →  volume
+```
 
-## How generation works
+## Adding an event is three steps
 
-`SjGameManager` is the singleton holding every spawn pool: road tiles, scenery tiles, events, cars,
-UI parents, cutscenes.
-
-`RandomRoadTile` sits on a trigger at the end of each tile. When the player crosses it, it
-instantiates a random next tile 360 units further down the Z axis and destroys itself. Constant
-memory, infinite road.
-
-`RandomEventManager` populates a section on `Start` with one to three events. Each event prefab
-declares where it belongs by which interface it implements:
+Make the prefab, implement one interface, drop it in the pool. There's no dispatch code to edit —
+the prefab declares where it belongs:
 
 ```csharp
-if (component is INextRoad)  CreateNextRoadRandomEvent(spawnObj);  // ahead, off the driving line
-if (component is IInRoad)    CreateOnRoadRandomEvent(spawnObj);    // on the road itself
+if (component is INextRoad)  // ahead, off the driving line
+if (component is IInRoad)    // on the road itself
 ```
 
-So adding a new event type is: make the prefab, implement one of the two interfaces, drop it in the
-pool. No dispatch code to edit.
+## Run it
 
-`RandomEventTrigger` handles the memory variant — it walks `spawnUiParents`, clears whatever
-fragment is showing, and raises the next one.
+Open `Ankara Jam/` in **Unity 6**, start from `Scenes/MainMenu.unity`.
 
-## Structure
+---
 
-```text
-Ankara Jam/Assets/
-  PlayerControls.inputactions   generated Input System bindings
-  Prefabs/
-    SjGameManager.cs            spawn pools, cutscene list, singleton
-    RandomRoadTile.cs           endless road generation
-    RandomEventManager.cs       per-section event population
-    RandomEventTrigger.cs       roadside + memory-fragment triggers
-    IInRoad.cs / INextRoad.cs   placement contracts
-    DontCrush.cs
-    Gifs/                       ChangeRawImageTexture, RemoveManager, RemoveMemory
-  Radio/RadioManager.cs         track cycling and volume
-  Scenes/                       MainMenu, gameplay, RadioScene, SampleScene
-```
-
-Driving is [Realistic Car Controller Pro](https://assetstore.unity.com/), weather is RainMaker,
-foliage is Custom Tree Importer / AllSky / Oak & Poplar packs.
-
-## Running it
-
-Open `Ankara Jam/` in **Unity 6000.0.45f1** or newer and load `Assets/Scenes/gameplay.unity`.
-`MainMenu` is the intended entry point.
-
-## Notes
-
-Jam-scope code. Third-party assets in the project are covered by their own licenses — the repository
-license applies to the game code under `Prefabs/`, `Radio/` and `Scenes/`.
+<sub>Driving is Realistic Car Controller Pro, weather is RainMaker, foliage is CTI/AllSky. Repo
+license covers the game code in <code>Prefabs/</code>, <code>Radio/</code> and <code>Scenes/</code>.</sub>
